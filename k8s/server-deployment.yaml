@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: server
+  name: server
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: server
+  template:
+    metadata:
+      labels:
+        app: server
+    spec:
+      containers:
+        - image: task-tide-server
+          name: server
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8171
+              name: server
+          env:
+            - name: MONGO_URL
+              value: mongodb://db
+            - name: REDIS_URL
+              value: redis://redis:6379
+            - name: DISABLE_SECURITY
+              value: foo-bar-baz
+            - name: BASE_SERVER_URL
+              value: "http://localhost:31001"
+            - name: BASE_UI_URL
+              value: "http://localhost:31000"
+            - name: REDIRECT_URI
+              value: "http://localhost:31000/api/login-callback"
+            - name: GITLAB_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: gitlab-client-secret
+                  key: clientId
+            - name: GITLAB_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: gitlab-client-secret
+                  key: clientSecret

@@ -1,0 +1,6 @@
+schema: ./Routes/graphql/schema.graphql
+documents: '**/*.graphql'
+extensions:
+  endpoints:
+    dev:
+      url: http://localhost:8171/api/graphql
